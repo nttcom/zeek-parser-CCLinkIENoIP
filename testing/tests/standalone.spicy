@@ -1,0 +1,7 @@
+# @TEST-DOC: Test parsing behavior of cc_link_noip.
+#
+# @TEST-EXEC: spicyc ${DIST}/analyzer/cc_link_noip.spicy -j -d -o cc_link_noip.hlto
+#
+# TODO: Add/adapt standalone parsing tests here.
+# @TEST-EXEC: printf "test string" | spicy-dump -p cc_link_noip::Packet cc_link_noip.hlto >output 2>&1
+# @TEST-EXEC: TEST_DIFF_CANONIFIER= btest-diff output
