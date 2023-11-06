@@ -6,7 +6,7 @@ export {
 	                        LOG_TSN };
 
 	type Info_NOIP: record {
-		ts:				 time &log &optional;
+		ts:		         time &log &optional;
 		src_mac:		 string &log &optional;
 		dst_mac:		 string &log &optional;
 		service:		 string &log &optional;
@@ -14,124 +14,124 @@ export {
 		cmd:			 string &log &optional;
 		node_type:		 string &log &optional;
 		node_id:		 int &log &optional;
-		connection_info: string &log &optional;
-		src_node_number: string &log &optional;
+		connection_info:         string &log &optional;
+		src_node_number:         string &log &optional;
 		number:			 int &log &optional;
 		ts_end:			 time &log &optional;
 	};
 
 	type Info_TSN: record {
-		ts:				time &log &optional;
+		ts:			time &log &optional;
 		src_mac:		string &log &optional;
 		dst_mac:		string &log &optional;
 		protocol:		string &log &optional;
 		pdu_type: 		string &log &optional;
-		pdu_choice:     string &log &optional;
+		pdu_choice:             string &log &optional;
 		node_type:		string &log &optional;
-		device_type:    string &log &optional;
-		function_name:  string &log &optional;
+		device_type:            string &log &optional;
+		function_name:          string &log &optional;
 		number:			int &log &optional;
 		ts_end:			time &log &optional;
 	};
 
 	global res_nodetype_control: table[string] of string = { ["\x00"] = "management node", 
-	                                    ["\x02"] = "normal node",
-										["!"] = "master node in the Node-to-node test",};
+	                                                         ["\x02"] = "normal node",
+								 ["!"] = "master node in the Node-to-node test",};
 	
 	global res_nodetype_field: table[string] of string = { ["0"] = "master node", 
-										["2"] = "local node",
-										["3"] = "intelligent device node",
-										["4"] = "remote device node",
-										["5"] = "remote I/O node",};
+							       ["2"] = "local node",
+							       ["3"] = "intelligent device node",
+							       ["4"] = "remote device node",
+							       ["5"] = "remote I/O node",};
 
 	global res_nodetype_tsn: table[string] of string = { ["\x00"] = "master station", 
-	                                    ["\x80"] = "master station",
-										["\x01"] = "slave station",
-										["\x81"] = "slave station",
-										["\x02"] = "managed switch",
-										["\x82"] = "managed switch",
-										["\x03"] = "use prohibited",
-										["\x83"] = "use prohibited",
-										["\x04"] = "sub-master station",
-										["\x84"] = "sub-master station",};
+	                                                     ["\x80"] = "master station",
+							     ["\x01"] = "slave station",
+							     ["\x81"] = "slave station",
+							     ["\x02"] = "managed switch",
+							     ["\x82"] = "managed switch",
+							     ["\x03"] = "use prohibited",
+							     ["\x83"] = "use prohibited",
+							     ["\x04"] = "sub-master station",
+							     ["\x84"] = "sub-master station",};
 
 	global res_ct_1: table[string] of string = { ["0"] = "slmpTransmitRequest", 
-	                                    ["\xb0"] = "slmpTransmitResponse",};
+	                                             ["\xb0"] = "slmpTransmitResponse",};
 
 	global res_ct_2_field: table[string] of string = { ["\x04"] = "getMemoryAccessInfo", 
-	                                    ["\x08"] = "run",
-										["\x09"] = "stop",
-										["\x10"] = "readMemory",
-										["\x12"] = "writeMemory",
-										["\x20"] = "messageTransfer",};
+	                                                   ["\x08"] = "run",
+							   ["\x09"] = "stop",
+							   ["\x10"] = "readMemory",
+							   ["\x12"] = "writeMemory",
+							   ["\x20"] = "messageTransfer",};
 	
 	global res_ct_2_control: table[string] of string = { ["\x04"] = "getMemoryAccessInfo", 
-	                                    ["\x08"] = "run",
-										["\x09"] = "stop",
-										["\x10"] = "readMemory",
-										["\x12"] = "writeMemory",};
+	                                                     ["\x08"] = "run",
+							     ["\x09"] = "stop",
+							     ["\x10"] = "readMemory",
+							     ["\x12"] = "writeMemory",};
 
 	global res_command_7: table[string] of string = { ["\x01"] = "deliverNodeInformation", 
-	                                    ["\x03"] = "getStatisticalInformation",
-										["\x04"] = "acquiresDetailedNodeInformation",
-										["\x0a"] = "acquiresOptionalInformation",};
+	                                                  ["\x03"] = "getStatisticalInformation",
+							  ["\x04"] = "acquiresDetailedNodeInformation",
+							  ["\x0a"] = "acquiresOptionalInformation",};
 	
 	global res_command_8: table[string] of string = { ["\x01"] = "communicationCycleSetting", 
-	                                    ["\x02"] = "objectRead",
-										["\x03"] = "objectWrite",};
+	                                                  ["\x02"] = "objectRead",
+							  ["\x03"] = "objectWrite",};
 	
 	global res_subCommand: table[string] of string = { ["\x80"] = "Response", 
-	                                    ["\x00"] = "Request",};
+	                                                   ["\x00"] = "Request",};
 	
-	global res_devicetype: table[string] of string = { ["\x00\x00"] = "not applicable", 
-	                                    ["\x00\x01"] = "PLC",
-										["\x00\x02"] = "personal computer",
-										["\x00\x03"] = "digital I/O",
-										["\x00\x04"] = "analog I/O",
-										["\x00\x05"] = "positioning controller",
-										["\x00\x06"] = "temperature controller",
-										["\x00\x07"] = "HMI",
-										["\x00\x08"] = "ID",
-										["\x00\x09"] = "serial conversion module",
-										["\x00\x1d"] = "cc-link to cc-link/LT bridge",
-										["\x00\x1f"] = "protocol converter module",
-										["\x00\x20"] = "inverter",
-										["\x00\x21"] = "servo",
-										["\x00\x22"] = "CNC",
-										["\x00\x23"] = "robot",
-										["\x00\x24"] = "power distribution control device",
-										["\x00\x30"] = "sensor",
-										["\x00\x31"] = "actuator",
-										["\x00\x32"] = "barcode reader",
-										["\x00\x33"] = "indicator (weight)",
-										["\x00\x34"] = "high-speed counter",
-										["\x00\x35"] = "switch",
-										["\x00\x36"] = "protocol analyzer",
-										["\x00\x37"] = "space transmission module",
-										["\x00\x38"] = "transport control module",
-										["\x00\x39"] = "power supply control module",
-										["\x00\x3b"] = "gas detectorr",
-										["\x00\x3c"] = "solenoid valve",
-										["\x00\x3d"] = "robot (general-purpose)",
-										["\x00\x3e"] = "printer control module",
-										["\x00\x3f"] = "motor control module",
-										["\x00\x40"] = "vacuum pump",
-										["\x00\x41"] = "multi-axis controller",
-										["\x00\x42"] = "general-purpose VME board",
-										["\x00\x43"] = "mass flow power supply module",
-										["\x00\x44"] = "mass flow controller",
-										["\x00\x45"] = "received power distribution device",
-										["\x00\x46"] = "control center",
-										["\x00\x47"] = "welding control module",
-										["\x00\x48"] = "indicator (general-purpose)",
-										["\x00\x49"] = "PID control module",
-										["\x00\x4a"] = "vacuum meter",
-										["\x00\x4b"] = "wireless module",
-										["\x00\x4c"] = "digital/analog I/O",
-										["\x00\x4d"] = "vacuum valve",
-										["\x00\x4e"] = "tension controller",
-										["\x00\x4f"] = "measuring machiner",
-										["\x00\x7f"] = "generic Device",};
+        global res_devicetype: table[string] of string = { ["\x00\x00"] = "not applicable", 
+							   ["\x00\x01"] = "PLC",
+							   ["\x00\x02"] = "personal computer",
+							   ["\x00\x03"] = "digital I/O",
+						           ["\x00\x04"] = "analog I/O",
+							   ["\x00\x05"] = "positioning controller",
+							   ["\x00\x06"] = "temperature controller",
+							   ["\x00\x07"] = "HMI",
+							   ["\x00\x08"] = "ID",
+						           ["\x00\x09"] = "serial conversion module",
+							   ["\x00\x1d"] = "cc-link to cc-link/LT bridge",
+							   ["\x00\x1f"] = "protocol converter module",
+							   ["\x00\x20"] = "inverter",
+							   ["\x00\x21"] = "servo",
+							   ["\x00\x22"] = "CNC",
+							   ["\x00\x23"] = "robot",
+							   ["\x00\x24"] = "power distribution control device",
+							   ["\x00\x30"] = "sensor",
+							   ["\x00\x31"] = "actuator",
+							   ["\x00\x32"] = "barcode reader",
+							   ["\x00\x33"] = "indicator (weight)",
+							   ["\x00\x34"] = "high-speed counter",
+							   ["\x00\x35"] = "switch",
+							   ["\x00\x36"] = "protocol analyzer",
+							   ["\x00\x37"] = "space transmission module",
+							   ["\x00\x38"] = "transport control module",
+							   ["\x00\x39"] = "power supply control module",
+							   ["\x00\x3b"] = "gas detectorr",
+							   ["\x00\x3c"] = "solenoid valve",
+							   ["\x00\x3d"] = "robot (general-purpose)",
+							   ["\x00\x3e"] = "printer control module",
+							   ["\x00\x3f"] = "motor control module",
+							   ["\x00\x40"] = "vacuum pump",
+							   ["\x00\x41"] = "multi-axis controller",
+							   ["\x00\x42"] = "general-purpose VME board",
+							   ["\x00\x43"] = "mass flow power supply module",
+							   ["\x00\x44"] = "mass flow controller",
+							   ["\x00\x45"] = "received power distribution device",
+							   ["\x00\x46"] = "control center",
+							   ["\x00\x47"] = "welding control module",
+							   ["\x00\x48"] = "indicator (general-purpose)",
+							   ["\x00\x49"] = "PID control module",
+							   ["\x00\x4a"] = "vacuum meter",
+						           ["\x00\x4b"] = "wireless module",
+							   ["\x00\x4c"] = "digital/analog I/O",
+							   ["\x00\x4d"] = "vacuum valve",
+							   ["\x00\x4e"] = "tension controller",
+							   ["\x00\x4f"] = "measuring machiner",
+							   ["\x00\x7f"] = "generic Device",};
 
 	type AggregationData_NOIP: record {
 		src_mac:		 string &log &optional;
@@ -141,8 +141,8 @@ export {
 		cmd:			 string &log &optional;
 		node_type:		 string &log &optional;
 		node_id:		 int &log &optional;
-		connection_info: string &log &optional;
-		src_node_number: string &log &optional;
+		connection_info:         string &log &optional;
+		src_node_number:         string &log &optional;
 	};
 
 	type AggregationData_TSN: record {
@@ -150,10 +150,10 @@ export {
 		dst_mac:		string &log &optional;
 		protocol:		string &log &optional;
 		pdu_type: 		string &log &optional;
-		pdu_choice:     string &log &optional;
+		pdu_choice:             string &log &optional;
 		node_type:		string &log &optional;
-		device_type:    string &log &optional;
-		function_name:  string &log &optional;
+		device_type:            string &log &optional;
+		function_name:          string &log &optional;
 	};
 
 	type Ts_num: record {
@@ -1346,25 +1346,25 @@ event raw::acyclicDetection(p: raw_pkt_hdr, detectionVer: string)
 
 
 event raw::acyclicDetectionAck(p: raw_pkt_hdr, 
-							nodeType: string, 
-							detectionAckVer: string, 
-							deviceType: string, 
-							function1: int, 
-							function2: int, 
-							function3: int, 
-							function4: int, 
-							function5: int, 
-							function6: int, 
-							function7: int, 
-							function8: int, 
-							function9: int,
-							function10: int,
-							function11: int,
-							function12: int,
-							function13: int,
-							function14: int,
-							function15: int,
-							function16: int)
+				  nodeType: string, 
+				  detectionAckVer: string, 
+				  deviceType: string, 
+				  function1: int, 
+				  function2: int, 
+				  function3: int, 
+				  function4: int, 
+				  function5: int, 
+				  function6: int, 
+				  function7: int, 
+				  function8: int, 
+				  function9: int,
+				  function10: int,
+				  function11: int,
+				  function12: int,
+				  function13: int,
+				  function14: int,
+				  function15: int,
+				  function16: int)
 {
 	local info_tsn: Info_TSN;
 	local aggregationData_tsn: AggregationData_TSN;
@@ -1458,7 +1458,7 @@ event raw::acyclicData(p: raw_pkt_hdr)
 }
 # -----------------------------------
 
-# 集約 local debug用
+# local debug
 event zeek_done()
 {
 	if (|res_aggregationData_noip| > 0) {
