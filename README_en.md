@@ -76,8 +76,8 @@ It outputs as `cclink-ie.log`.
 | Field | Type | Description |
 | --- | --- | --- |
 | ts | time | timestamp of the first communication |
-| src_mac | string | source MCA address |
-| dst_mac | string | destination MCA address |
+| src_mac | string | source MAC address |
+| dst_mac | string | destination MAC address |
 | service | string | protocol name |
 | pdu_type | string | protocol function name |
 | cmd | string | specific fields for transient1 and transient2 |
@@ -117,8 +117,8 @@ It also outputs as `cclink-ie-tsn.log`.
 | Field | Type | Description |
 | --- | --- | --- |
 | ts | time | timestamp of the first communication |
-| src_mac | string | source MCA address |
-| dst_mac | string | destination MCA address |
+| src_mac | string | source MAC address |
+| dst_mac | string | destination MAC address |
 | protocol | string | protocol name |
 | pdu_type | string | PDU type |
 | pdu_choice | string | name of PDU service choice |
