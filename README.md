@@ -43,7 +43,7 @@ spicyc v1.5.0 (d0bc6053)
 ```
 ~$ cd ~/zeek-parser-CCLinkIENoIP/analyzer
 ~$ spicyz -o cc_link_noip.hlto cc_link_noip.spicy cc_link_noip.evt
-~$ # cc_link_noip.hltoが生成されます
+# cc_link_noip.hltoが生成されます
 ~$ cp cc_link_noip.hlto /usr/local/zeek/lib/zeek-spicy/modules/
 ```
 
