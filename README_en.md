@@ -121,7 +121,7 @@ It also outputs as `cclink-ie-tsn.log`.
 | dst_mac | string | destination MCA address |
 | protocol | string | protocol name |
 | pdu_type | string | PDU type |
-| pdu_choice | string | name of Protocol Data Unit service |
+| pdu_choice | string | name of PDU service choice |
 | node_type | string | node type |
 | device_type | string | model type |
 | function_name | string | function type |
