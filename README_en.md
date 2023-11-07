@@ -39,7 +39,7 @@ Compile source code and copy the object files to the following path.
 ```
 ~$ cd ~/zeek-parser-CCLinkIENoIP/analyzer
 ~$ spicyz -o cc_link_noip.hlto cc_link_noip.spicy cc_link_noip.evt
-~$ # cc_link_noip.hltoが生成されます
+# cc_link_noip.hlto is generated
 ~$ cp cc_link_noip.hlto /usr/local/zeek/lib/zeek-spicy/modules/
 ```
 
