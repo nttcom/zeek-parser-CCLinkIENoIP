@@ -78,7 +78,7 @@ It outputs as `cclink-ie.log`.
 | ts | time | timestamp of the first communication |
 | src_mac | string | source MAC address |
 | dst_mac | string | destination MAC address |
-| service | string | protocol name |
+| protocol | string | protocol name |
 | pdu_type | string | protocol function name |
 | cmd | string | specific fields for transient1 and transient2 |
 | node_type | string | node type |
@@ -91,23 +91,23 @@ It outputs as `cclink-ie.log`.
 An example of `cclink-ie.log` is as follows:
 ```
 #separator \x09
-#set_separator .
-#empty_field (empty)
-#unset_field -
-#path cclink-ie
-#open 2023-03-15-16-56-36
-#fields ts src_mac dst_mac service pdu_type cmd node_type node_id connection_info src_node_number number ts_end
-#types time string string string string string string string int string string string int time
-1667903833.066101 00:11:11:11:11:11 00:00:00:00:01 cclink_ie_control select - - - - 0x0001 61 1667903833.134207
-1667903833.065821 00:11:11:11:11:11 00:00:00:00:01 cclink_ie_control scan - - - - 0x0001 48 1667903833.129023
-1667903833.064742 00:11:11:11:11:11 00:00:00:00:01 cclink_ie_control connectAck - - - - 0x0001 61 1667903833.133590
-1667903833.065511 00:11:11:11:11:11 00:00:00:00:01 cclink_ie_control connect - - - 0x0001 62 1667903833.134085
-1667903833.067818 00:11:11:11:11:11 00:00:00:00:01 cclink_ie_control nTNTest - - - - 0x0001 53 1667903833.131018
-1667903833.068939 00:11:11:11:11:11 00:00:00:00:01 cclink_ie_control dummy - - - 0x0001 57 1667903833.133957
-1667903833.065083 00:11:11:11:11:11 00:00:00:00:01 cclink_ie_control collect - - - - 0x0001 61 1667903833.133231
-1667903833.064936 00:11:11:11:11:11 00:00:00:00:01 cclink_ie_control launch - - - - 0x0001 40 1667903833.132990
-1667903833.066240 00:11:11:11:11:11 00:00:00:00:01 cclink_ie_control token - - - - 0x0001 57 1667903833.133351
-#close 2023-03-15-16-56-36
+#set_separator	,
+#empty_field	(empty)
+#unset_field	-
+#path	cclink-ie
+#open	2023-03-15-16-56-36
+#fields	ts	src_mac	dst_mac	protocol	pdu_type	cmd	node_type	node_id	connection_info	src_node_number	number	ts_end
+#types	time	string	string	string	string	string	string	int	string	string	int	time
+1658222113.678757	00:11:11:11:11:11	00:00:00:00:00:01	cclink_ie_field	offset	-	-	0	-	0x0000	25	1658222113.737340
+1658222113.676554	00:11:11:11:11:11	00:00:00:00:00:01	cclink_ie_field	timer	-	-	-	-	0x0000	23	1658222113.738575
+1658222113.676689	00:11:11:11:11:11	00:00:00:00:00:01	cclink_ie_field	transient1	unknownCt\x00	-	0	0x13	0x0000	29	1658222113.738687
+1658222113.679981	00:11:11:11:11:11	00:00:00:00:00:01	cclink_ie_field	tokenM	-	-	0	-	0x0001	18	1658222113.732137
+1658222113.676363	00:11:11:11:11:11	00:00:00:00:00:01	cclink_ie_field	ipTransient	-	-	0	0x13	0x0000	21	1658222113.735251
+1658222113.677097	00:11:11:11:11:11	00:00:00:00:00:01	cclink_ie_field	cyclicDataRWr	-	-	0	-	0x0000	21	1658222113.737897
+1658222113.682223	00:11:11:11:11:11	00:00:00:00:00:01	cclink_ie_field	transientAck	-	-	0	0x13	0x0000	21	1658222113.739151
+1658222113.677636	00:11:11:11:11:11	00:00:00:00:00:01	cclink_ie_field	paramCheck	-	-	0	0x13	0x0000	26	1658222113.736735
+1658222113.677231	00:11:11:11:11:11	00:00:00:00:00:01	cclink_ie_field	setup	-	-	1	-	0x0001	22	1658222113.736964
+#close	2023-03-15-16-56-36
 ```
 
 ### When TSN frame is contained
@@ -120,8 +120,8 @@ It also outputs as `cclink-ie-tsn.log`.
 | src_mac | string | source MAC address |
 | dst_mac | string | destination MAC address |
 | protocol | string | protocol name |
-| pdu_type | string | PDU type |
-| pdu_choice | string | name of PDU service choice |
+| flame_type | string | data frame name |
+| pdu_type | string | protocol function name |
 | node_type | string | node type |
 | device_type | string | model type |
 | function_name | string | function type |
@@ -135,20 +135,20 @@ An example of `cclink-ie-tsn.log` is as follows:
 #empty_field	(empty)
 #unset_field	-
 #path	cclink-ie-tsn
-#open	2023-10-20-08-20-36
-#fields	ts	src_mac	dst_mac	protocol	pdu_type	pdu_choice	node_type	device_type	function_name	number	ts_end
+#open	2023-11-08-08-36-11
+#fields	ts	src_mac	dst_mac	protocol	flame_type	pdu_type	node_type	device_type	function_name	number	ts_end
 #types	time	string	string	string	string	string	string	string	string	int	time
 1697605189.166718	00:0c:29:a8:c1:f0	80:22:a7:83:f9:7e	cclink_ie_tsn&field	acyclic	acyclicTestDataAck	master station	-	-	30	1697605189.169635
 1697605738.834423	00:0c:29:a8:c1:f0	b4:b5:2f:76:cb:e4	cclink_ie_tsn	acyclic	acyclicTestData	master station	-	-	30	1697605738.837371
 1697605817.307274	00:0c:29:a8:c1:f0	00:4e:01:c5:21:8f	cclink_ie_tsn	acyclic	acyclicData	-	-	-	30	1697605817.309732
-1697605847.495273	28:e9:8e:75:95:a7	28:e9:8e:18:71:58	cclink_ie_tsn	acyclic	acyclicDetectionAck Ver.0	slave station	personal computer	srwcl	30	1697605847.499091
-1697605894.366325	28:e9:8e:75:95:a7	28:e9:8e:18:71:58	cclink_ie_tsn	cyclic	cyclicS/cyclicSs	-	-	-	30	1697605894.369247
-1697605826.702719	00:0c:29:5f:70:ce	08:00:27:b9:d0:0a	cclink_ie_tsn	acyclic	acyclicDetection Ver.0	-	-	-	30	1697605826.705461
+1697605837.472867	28:e9:8e:18:71:58	08:00:27:b9:d0:0b	cclink_ie_tsn	acyclic	acyclicDetection Ver.0	-	-	-	30	1697605837.475716
 1697605885.372366	28:e9:8e:18:71:58	28:e9:8e:75:95:a7	cclink_ie_tsn	cyclic	cyclicM/cyclicMs	-	-	-	30	1697605885.375176
 1697605875.249707	28:e9:8e:18:71:58	ff:ff:ff:ff:ff:ff	cclink_ie_tsn	acyclic	acyclicPriority	-	-	-	30	1697605875.252467
 1697605857.305008	28:e9:8e:75:95:a7	28:e9:8e:18:71:58	cclink_ie_tsn	acyclic	acyclicDetectionAck Ver.1	slave station	digital I/O	srwcvpdiIR	30	1697605857.309105
-1697605837.472867	28:e9:8e:18:71:58	08:00:27:b9:d0:0b	cclink_ie_tsn	acyclic	acyclicDetection Ver.0	-	-	-	30	1697605837.475716
-#close	2023-10-20-08-20-36
+1697605894.366325	28:e9:8e:75:95:a7	28:e9:8e:18:71:58	cclink_ie_tsn	cyclic	cyclicS/cyclicSs	-	-	-	30	1697605894.369247
+1697605847.495273	28:e9:8e:75:95:a7	28:e9:8e:18:71:58	cclink_ie_tsn	acyclic	acyclicDetectionAck Ver.0	slave station	personal computer	srwcl	30	1697605847.499091
+1697605826.702719	00:0c:29:5f:70:ce	08:00:27:b9:d0:0a	cclink_ie_tsn	acyclic	acyclicDetection Ver.0	-	-	-	30	1697605826.705461
+#close	2023-11-08-08-36-11
 ```
 
 ## Related Software
