@@ -9,7 +9,7 @@ export {
 		ts:		         time &log &optional;
 		src_mac:		 string &log &optional;
 		dst_mac:		 string &log &optional;
-		service:		 string &log &optional;
+		protocol:		 string &log &optional;
 		pdu_type: 		 string &log &optional;
 		cmd:			 string &log &optional;
 		node_type:		 string &log &optional;
@@ -25,8 +25,8 @@ export {
 		src_mac:		string &log &optional;
 		dst_mac:		string &log &optional;
 		protocol:		string &log &optional;
-		pdu_type: 		string &log &optional;
-		pdu_choice:             string &log &optional;
+		flame_type: 		string &log &optional;
+		pdu_type:               string &log &optional;
 		node_type:		string &log &optional;
 		device_type:            string &log &optional;
 		function_name:          string &log &optional;
@@ -136,7 +136,7 @@ export {
 	type AggregationData_NOIP: record {
 		src_mac:		 string &log &optional;
 		dst_mac:		 string &log &optional;
-		service:		 string &log &optional;
+		protocol:		 string &log &optional;
 		pdu_type: 		 string &log &optional;
 		cmd:			 string &log &optional;
 		node_type:		 string &log &optional;
@@ -149,8 +149,8 @@ export {
 		src_mac:		string &log &optional;
 		dst_mac:		string &log &optional;
 		protocol:		string &log &optional;
-		pdu_type: 		string &log &optional;
-		pdu_choice:             string &log &optional;
+		flame_type: 		string &log &optional;
+		pdu_type:               string &log &optional;
 		node_type:		string &log &optional;
 		device_type:            string &log &optional;
 		function_name:          string &log &optional;
@@ -168,7 +168,7 @@ export {
 	info_insert_noip$ts = res_aggregationData_noip[idx]$ts_s;
 	info_insert_noip$src_mac = idx$src_mac;
 	info_insert_noip$dst_mac = idx$dst_mac;
-	info_insert_noip$service = idx$service;
+	info_insert_noip$protocol = idx$protocol;
 	info_insert_noip$pdu_type = idx$pdu_type;
 	if ( idx?$cmd ){
 		info_insert_noip$cmd = idx$cmd;
@@ -205,8 +205,8 @@ export {
 	info_insert_tsn$src_mac = idx$src_mac;
 	info_insert_tsn$dst_mac = idx$dst_mac;
 	info_insert_tsn$protocol = idx$protocol;
+	info_insert_tsn$flame_type = idx$flame_type;
 	info_insert_tsn$pdu_type = idx$pdu_type;
-	info_insert_tsn$pdu_choice = idx$pdu_choice;
 	if ( idx?$node_type ){
 		info_insert_tsn$node_type = idx$node_type;
 	}
@@ -263,7 +263,7 @@ function create_aggregationData_noip(info_noip: Info_NOIP): AggregationData_NOIP
 	if ( info_noip?$src_node_number ){
 		aggregationData_noip$src_node_number = info_noip$src_node_number;
 	}
-	aggregationData_noip$service = info_noip$service;
+	aggregationData_noip$protocol = info_noip$protocol;
 
 	return aggregationData_noip;
 	}
@@ -274,8 +274,8 @@ function create_aggregationData_tsn(info_tsn: Info_TSN): AggregationData_TSN
 	aggregationData_tsn$src_mac = info_tsn$src_mac;
 	aggregationData_tsn$dst_mac = info_tsn$dst_mac;
 	aggregationData_tsn$protocol = info_tsn$protocol;
+	aggregationData_tsn$flame_type = info_tsn$flame_type;
 	aggregationData_tsn$pdu_type = info_tsn$pdu_type;
-	aggregationData_tsn$pdu_choice = info_tsn$pdu_choice;
 	if ( info_tsn?$node_type ){
 		aggregationData_tsn$node_type = info_tsn$node_type;
 	}
@@ -326,17 +326,17 @@ event raw::tokenM(p: raw_pkt_hdr, dataType: string, protocolVerType: string, src
 	info_noip$pdu_type = "tokenM";
 	if ( protocolVerType == "\x00" )
 	{	
-		info_noip$service="cclink_ie_control";
+		info_noip$protocol="cclink_ie_control";
 		info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 		info_noip$node_id=nodeId;
 	}
 	else if ( protocolVerType == "\x01" )
 	{	
-		info_noip$service="cclink_ie_field";
+		info_noip$protocol="cclink_ie_field";
 		info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 		info_noip$node_id=nodeId;
 	} else {
-		info_noip$service="unknownProtocolVerType" + protocolVerType;
+		info_noip$protocol="unknownProtocolVerType" + protocolVerType;
 	}
 		
 	aggregationData_noip = create_aggregationData_noip(info_noip);
@@ -359,7 +359,7 @@ event raw::persuasion(p: raw_pkt_hdr, dataType: string, protocolVerType: string,
 		} else {
 			info_noip$node_type = "unknownNodetype" + nodetype;
 		}
-		info_noip$service = "cclink_ie_control";
+		info_noip$protocol = "cclink_ie_control";
 	}
 	else if ( protocolVerType == "\x01" )
 	{	
@@ -369,9 +369,9 @@ event raw::persuasion(p: raw_pkt_hdr, dataType: string, protocolVerType: string,
 		} else {
 			info_noip$node_type = "unknownNodetype" + nodetype;
 		}
-		info_noip$service = "cclink_ie_field";
+		info_noip$protocol = "cclink_ie_field";
 	} else {
-		info_noip$service = "unknownProtocolVerType" + protocolVerType;
+		info_noip$protocol = "unknownProtocolVerType" + protocolVerType;
 	}
 			
 	aggregationData_noip = create_aggregationData_noip(info_noip);
@@ -394,7 +394,7 @@ event raw::testData(p: raw_pkt_hdr, dataType: string, protocolVerType: string, s
 		} else {
 			info_noip_1$node_type = "unknownNodetype" + nodetype;
 		}
-		info_noip_1$service = "cclink_ie_control";
+		info_noip_1$protocol = "cclink_ie_control";
 		aggregationData_noip_1 = create_aggregationData_noip(info_noip_1);
 		insert_res_aggregationData_noip(aggregationData_noip_1, info_noip_1);
 	}
@@ -412,7 +412,7 @@ event raw::testData(p: raw_pkt_hdr, dataType: string, protocolVerType: string, s
 		} else {
 			info_noip_2$node_type = "unknownNodetype" + nodetype;
 		}
-		info_noip_2$service = "cclink_ie_field";
+		info_noip_2$protocol = "cclink_ie_field";
 		aggregationData_noip_2 = create_aggregationData_noip(info_noip_2);
 		insert_res_aggregationData_noip(aggregationData_noip_2, info_noip_2);
 	} 
@@ -424,8 +424,8 @@ event raw::testData(p: raw_pkt_hdr, dataType: string, protocolVerType: string, s
 		info_tsn_1$src_mac = p$l2$src;
 		info_tsn_1$dst_mac = p$l2$dst;
 		info_tsn_1$protocol = "cclink_ie_tsn";
-		info_tsn_1$pdu_type = "acyclic";
-		info_tsn_1$pdu_choice = "acyclicTestData";
+		info_tsn_1$flame_type = "acyclic";
+		info_tsn_1$pdu_type = "acyclicTestData";
 		info_tsn_1$node_type = "master station";
 		aggregationData_tsn_1 = create_aggregationData_tsn(info_tsn_1);
 		insert_res_aggregationData_tsn(aggregationData_tsn_1, info_tsn_1);
@@ -438,8 +438,8 @@ event raw::testData(p: raw_pkt_hdr, dataType: string, protocolVerType: string, s
 		info_tsn_2$src_mac = p$l2$src;
 		info_tsn_2$dst_mac = p$l2$dst;
 		info_tsn_2$protocol = "cclink_ie_tsn&field";
-		info_tsn_2$pdu_type = "acyclic";
-		info_tsn_2$pdu_choice = "acyclicTestData";
+		info_tsn_2$flame_type = "acyclic";
+		info_tsn_2$pdu_type = "acyclicTestData";
 		info_tsn_2$node_type = "master station";
 		aggregationData_tsn_2 = create_aggregationData_tsn(info_tsn_2);
 		insert_res_aggregationData_tsn(aggregationData_tsn_2, info_tsn_2);
@@ -463,7 +463,7 @@ event raw::testDataAck(p: raw_pkt_hdr, dataType: string, protocolVerType: string
 		} else {
 			info_noip_1$node_type = "unknownNodetype" + nodetype;
 		}
-		info_noip_1$service = "cclink_ie_control";
+		info_noip_1$protocol = "cclink_ie_control";
 		aggregationData_noip_1 = create_aggregationData_noip(info_noip_1);
 		insert_res_aggregationData_noip(aggregationData_noip_1, info_noip_1);
 	}
@@ -481,7 +481,7 @@ event raw::testDataAck(p: raw_pkt_hdr, dataType: string, protocolVerType: string
 		} else {
 			info_noip_2$node_type = "unknownNodetype" + nodetype;
 		}
-		info_noip_2$service = "cclink_ie_field";
+		info_noip_2$protocol = "cclink_ie_field";
 		aggregationData_noip_2 = create_aggregationData_noip(info_noip_2);
 		insert_res_aggregationData_noip(aggregationData_noip_2, info_noip_2);
 	} 
@@ -493,8 +493,8 @@ event raw::testDataAck(p: raw_pkt_hdr, dataType: string, protocolVerType: string
 		info_tsn_1$src_mac = p$l2$src;
 		info_tsn_1$dst_mac = p$l2$dst;
 		info_tsn_1$protocol = "cclink_ie_tsn";
-		info_tsn_1$pdu_type = "acyclic";
-		info_tsn_1$pdu_choice = "acyclicTestDataAck";
+		info_tsn_1$flame_type = "acyclic";
+		info_tsn_1$pdu_type = "acyclicTestDataAck";
 		info_tsn_1$node_type = "master station";
 		aggregationData_tsn_1 = create_aggregationData_tsn(info_tsn_1);
 		insert_res_aggregationData_tsn(aggregationData_tsn_1, info_tsn_1);
@@ -508,8 +508,8 @@ event raw::testDataAck(p: raw_pkt_hdr, dataType: string, protocolVerType: string
 		info_tsn_2$src_mac = p$l2$src;
 		info_tsn_2$dst_mac = p$l2$dst;
 		info_tsn_2$protocol = "cclink_ie_tsn&field";
-		info_tsn_2$pdu_type = "acyclic";
-		info_tsn_2$pdu_choice = "acyclicTestDataAck";
+		info_tsn_2$flame_type = "acyclic";
+		info_tsn_2$pdu_type = "acyclicTestDataAck";
 		info_tsn_2$node_type = "master station";
 		aggregationData_tsn_2 = create_aggregationData_tsn(info_tsn_2);
 		insert_res_aggregationData_tsn(aggregationData_tsn_2, info_tsn_2);
@@ -528,15 +528,15 @@ event raw::setup(p: raw_pkt_hdr, dataType: string, protocolVerType: string, srcN
 	{	
 		info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 		info_noip$node_id=nodeId;
-		info_noip$service="cclink_ie_control";
+		info_noip$protocol="cclink_ie_control";
 	}
 	else if ( protocolVerType == "\x01" )
 	{	
 		info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 		info_noip$node_id=nodeId;
-		info_noip$service="cclink_ie_field";
+		info_noip$protocol="cclink_ie_field";
 	} else {
-		info_noip$service="unknownProtocolVerType" + protocolVerType;
+		info_noip$protocol="unknownProtocolVerType" + protocolVerType;
 	}
 			
 	aggregationData_noip = create_aggregationData_noip(info_noip);
@@ -553,15 +553,15 @@ event raw::setupAck(p: raw_pkt_hdr, dataType: string, protocolVerType: string, s
 	info_noip$pdu_type = "setupAck";
 	if ( protocolVerType == "\x00" )
 	{
-		info_noip$service="cclink_ie_control";
+		info_noip$protocol="cclink_ie_control";
 		info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 	}
 	else if ( protocolVerType == "\x01" )
 	{	
-		info_noip$service="cclink_ie_field";
+		info_noip$protocol="cclink_ie_field";
 		info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 	} else {
-		info_noip$service="unknownProtocolVerType" + protocolVerType;
+		info_noip$protocol="unknownProtocolVerType" + protocolVerType;
 	}
 			
 	aggregationData_noip = create_aggregationData_noip(info_noip);
@@ -580,7 +580,7 @@ event raw::myStatus(p: raw_pkt_hdr, dataType: string, protocolVerType: string, s
 	{	
 		info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 		info_noip$node_id=nodeId;
-		info_noip$service = "cclink_ie_control";
+		info_noip$protocol = "cclink_ie_control";
 	}
 	else if ( protocolVerType == "\x01" )
 	{	
@@ -591,9 +591,9 @@ event raw::myStatus(p: raw_pkt_hdr, dataType: string, protocolVerType: string, s
 		} else {
 			info_noip$node_type = "unknownNodetype" + nodetype;
 		}
-		info_noip$service = "cclink_ie_field";
+		info_noip$protocol = "cclink_ie_field";
 	} else {
-		info_noip$service = "unknownProtocolVerType" + protocolVerType;
+		info_noip$protocol = "unknownProtocolVerType" + protocolVerType;
 	}
 			
 	aggregationData_noip = create_aggregationData_noip(info_noip);
@@ -613,16 +613,16 @@ event raw::measure(p: raw_pkt_hdr, dataType: string, protocolVerType: string, sr
 	info_noip$pdu_type = "measure";
 	if ( protocolVerType == "\x00" )
 	{	
-		info_noip$service="cclink_ie_control";
+		info_noip$protocol="cclink_ie_control";
 		info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 	}
 	else if ( protocolVerType == "\x01" )
 	{	
-		info_noip$service="cclink_ie_field";
+		info_noip$protocol="cclink_ie_field";
 		info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 		info_noip$node_id=nodeId;
 	} else {
-		info_noip$service="unknownProtocolVerType" + protocolVerType;
+		info_noip$protocol="unknownProtocolVerType" + protocolVerType;
 	}
 			
 	aggregationData_noip = create_aggregationData_noip(info_noip);
@@ -639,16 +639,16 @@ event raw::measureAck(p: raw_pkt_hdr, dataType: string, protocolVerType: string,
 	info_noip$pdu_type = "measureAck";
 	if ( protocolVerType == "\x00" )
 	{	
-		info_noip$service="cclink_ie_control";
+		info_noip$protocol="cclink_ie_control";
 		info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 	}
 	else if ( protocolVerType == "\x01" )
 	{
-		info_noip$service="cclink_ie_field";
+		info_noip$protocol="cclink_ie_field";
 		info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 		info_noip$node_id=nodeId;
 	} else {
-		info_noip$service="unknownProtocolVerType" + protocolVerType;
+		info_noip$protocol="unknownProtocolVerType" + protocolVerType;
 	}
 			
 	aggregationData_noip = create_aggregationData_noip(info_noip);
@@ -665,16 +665,16 @@ event raw::offset(p: raw_pkt_hdr, dataType: string, protocolVerType: string, src
 	info_noip$pdu_type = "offset";
 	if ( protocolVerType == "\x00" )
 	{	
-		info_noip$service="cclink_ie_control";
+		info_noip$protocol="cclink_ie_control";
 		info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 	}
 	else if ( protocolVerType == "\x01" )
 	{	
-		info_noip$service="cclink_ie_field";
+		info_noip$protocol="cclink_ie_field";
 		info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 		info_noip$node_id=nodeId;
 	} else {
-		info_noip$service="unknownProtocolVerType" + protocolVerType;
+		info_noip$protocol="unknownProtocolVerType" + protocolVerType;
 	}
 			
 	aggregationData_noip = create_aggregationData_noip(info_noip);
@@ -691,16 +691,16 @@ event raw::update(p: raw_pkt_hdr, dataType: string, protocolVerType: string, src
 	info_noip$pdu_type = "update";
 	if ( protocolVerType == "\x00" )
 	{	
-		info_noip$service="cclink_ie_control";
+		info_noip$protocol="cclink_ie_control";
 		info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 	}
 	else if ( protocolVerType == "\x01" )
 	{	
-		info_noip$service="cclink_ie_field";
+		info_noip$protocol="cclink_ie_field";
 		info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 		info_noip$node_id=nodeId;
 	} else {
-		info_noip$service="unknownProtocolVerType" + protocolVerType;
+		info_noip$protocol="unknownProtocolVerType" + protocolVerType;
 	}
 			
 	aggregationData_noip = create_aggregationData_noip(info_noip);
@@ -720,16 +720,16 @@ event raw::cyclicDataRWw(p: raw_pkt_hdr, dataType: string, protocolVerType: stri
 	info_noip$pdu_type = "cyclicDataRWw";
 	if ( protocolVerType == "\x00" )
 	{
-		info_noip$service="cclink_ie_control";
+		info_noip$protocol="cclink_ie_control";
 		info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 	}
 	else if ( protocolVerType == "\x01" )
 	{
-		info_noip$service="cclink_ie_field";
+		info_noip$protocol="cclink_ie_field";
 		info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 		info_noip$node_id=nodeId;
 	} else {
-		info_noip$service="unknownProtocolVerType" + protocolVerType;
+		info_noip$protocol="unknownProtocolVerType" + protocolVerType;
 	}
 			
 	aggregationData_noip = create_aggregationData_noip(info_noip);
@@ -746,16 +746,16 @@ event raw::cyclicDataRY(p: raw_pkt_hdr, dataType: string, protocolVerType: strin
 	info_noip$pdu_type = "cyclicDataRY";
 	if ( protocolVerType == "\x00" )
 	{
-		info_noip$service="cclink_ie_control";
+		info_noip$protocol="cclink_ie_control";
 		info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 	}
 	else if ( protocolVerType == "\x01" )
 	{
-		info_noip$service="cclink_ie_field";
+		info_noip$protocol="cclink_ie_field";
 		info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 		info_noip$node_id=nodeId;
 	} else {
-		info_noip$service="unknownProtocolVerType" + protocolVerType;
+		info_noip$protocol="unknownProtocolVerType" + protocolVerType;
 	}
 			
 	aggregationData_noip = create_aggregationData_noip(info_noip);
@@ -772,16 +772,16 @@ event raw::cyclicDataRWr(p: raw_pkt_hdr, dataType: string, protocolVerType: stri
 	info_noip$pdu_type = "cyclicDataRWr";
 	if ( protocolVerType == "\x00" )
 	{
-		info_noip$service="cclink_ie_control";
+		info_noip$protocol="cclink_ie_control";
 		info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 	}
 	else if ( protocolVerType == "\x01" )
 	{
-		info_noip$service="cclink_ie_field";
+		info_noip$protocol="cclink_ie_field";
 		info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 		info_noip$node_id=nodeId;
 	} else {
-		info_noip$service="unknownProtocolVerType" + protocolVerType;
+		info_noip$protocol="unknownProtocolVerType" + protocolVerType;
 	}
 			
 	aggregationData_noip = create_aggregationData_noip(info_noip);
@@ -798,16 +798,16 @@ event raw::cyclicDataRX(p: raw_pkt_hdr, dataType: string, protocolVerType: strin
 	info_noip$pdu_type = "cyclicDataRX";
 	if ( protocolVerType == "\x00" )
 	{
-		info_noip$service="cclink_ie_control";
+		info_noip$protocol="cclink_ie_control";
 		info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 	}
 	else if ( protocolVerType == "\x01" )
 	{
-		info_noip$service="cclink_ie_field";
+		info_noip$protocol="cclink_ie_field";
 		info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 		info_noip$node_id=nodeId;
 	} else {
-		info_noip$service="unknownProtocolVerType" + protocolVerType;
+		info_noip$protocol="unknownProtocolVerType" + protocolVerType;
 	}
 			
 	aggregationData_noip = create_aggregationData_noip(info_noip);
@@ -837,7 +837,7 @@ event raw::transient1(p: raw_pkt_hdr, dataType: int, protocolVerType: string, sr
 		info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 		info_noip$connection_info="0x" + string_to_ascii_hex(connectionInfo);
 		info_noip$node_id=nodeId;
-		info_noip$service = "cclink_ie_control";
+		info_noip$protocol = "cclink_ie_control";
 	} else if ( protocolVerType == "\x01" ){
 		info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 		info_noip$connection_info="0x" + string_to_ascii_hex(connectionInfo);
@@ -861,9 +861,9 @@ event raw::transient1(p: raw_pkt_hdr, dataType: int, protocolVerType: string, sr
 				info_noip$cmd = "unknownCmd" + data$command_8 + data$subCommand_8;
 			}
 		}
-		info_noip$service = "cclink_ie_field";
+		info_noip$protocol = "cclink_ie_field";
 	} else {
-		info_noip$service = "unknownProtocolVerType" + protocolVerType;
+		info_noip$protocol = "unknownProtocolVerType" + protocolVerType;
 	}
 	
 	aggregationData_noip = create_aggregationData_noip(info_noip);
@@ -880,17 +880,17 @@ event raw::transientAck(p: raw_pkt_hdr, dataType: string, protocolVerType: strin
 	info_noip$pdu_type = "transientAck";
 	if ( protocolVerType == "\x00" )
 	{	
-		info_noip$service="cclink_ie_control";
+		info_noip$protocol="cclink_ie_control";
 		info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 	}
 	else if ( protocolVerType == "\x01" )
 	{
-		info_noip$service="cclink_ie_field";
+		info_noip$protocol="cclink_ie_field";
 		info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 		info_noip$connection_info="0x" + string_to_ascii_hex(connectionInfo);
 		info_noip$node_id=nodeId;
 	} else {
-		info_noip$service="unknownProtocolVerType" + protocolVerType;
+		info_noip$protocol="unknownProtocolVerType" + protocolVerType;
 	}
 			
 	aggregationData_noip = create_aggregationData_noip(info_noip);
@@ -915,7 +915,7 @@ event raw::transient2(p: raw_pkt_hdr, dataType: string, protocolVerType: string,
 		} else {
 			info_noip$cmd = "unknownCt" + ct;
 		}
-		info_noip$service = "cclink_ie_control";
+		info_noip$protocol = "cclink_ie_control";
 	}
 	else if ( protocolVerType == "\x01" )
 	{	
@@ -927,9 +927,9 @@ event raw::transient2(p: raw_pkt_hdr, dataType: string, protocolVerType: string,
 		} else {
 			info_noip$cmd = "unknownCt" + ct;
 		}
-		info_noip$service = "cclink_ie_field";
+		info_noip$protocol = "cclink_ie_field";
 	} else {
-		info_noip$service = "unknownProtocolVerType" + protocolVerType;
+		info_noip$protocol = "unknownProtocolVerType" + protocolVerType;
 	}
 			
 	aggregationData_noip = create_aggregationData_noip(info_noip);
@@ -946,17 +946,17 @@ event raw::paramCheck(p: raw_pkt_hdr, dataType: string, protocolVerType: string,
 	info_noip$pdu_type = "paramCheck";
 	if ( protocolVerType == "\x00" )
 	{
-		info_noip$service="cclink_ie_control";
+		info_noip$protocol="cclink_ie_control";
 		info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 	}
 	else if ( protocolVerType == "\x01" )
 	{
-		info_noip$service="cclink_ie_field";
+		info_noip$protocol="cclink_ie_field";
 		info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 		info_noip$connection_info="0x" + string_to_ascii_hex(connectionInfo);
 		info_noip$node_id=nodeId;
 	} else {
-		info_noip$service="unknownProtocolVerType" + protocolVerType;
+		info_noip$protocol="unknownProtocolVerType" + protocolVerType;
 	}
 			
 	aggregationData_noip = create_aggregationData_noip(info_noip);
@@ -973,17 +973,17 @@ event raw::parameter(p: raw_pkt_hdr, dataType: string, protocolVerType: string, 
 	info_noip$pdu_type = "parameter";
 	if ( protocolVerType == "\x00" )
 	{	
-		info_noip$service="cclink_ie_control";
+		info_noip$protocol="cclink_ie_control";
 		info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 	}
 	else if ( protocolVerType == "\x01" )
 	{
-		info_noip$service="cclink_ie_field";
+		info_noip$protocol="cclink_ie_field";
 		info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 		info_noip$connection_info="0x" + string_to_ascii_hex(connectionInfo);
 		info_noip$node_id=nodeId;
 	} else {
-		info_noip$service="unknownProtocolVerType" + protocolVerType;
+		info_noip$protocol="unknownProtocolVerType" + protocolVerType;
 	}
 			
 	aggregationData_noip = create_aggregationData_noip(info_noip);
@@ -1000,15 +1000,15 @@ event raw::c_timer(p: raw_pkt_hdr, dataType: string, protocolVerType: string, sr
 	info_noip$pdu_type = "timer";
 	if ( protocolVerType == "\x00" )
 	{	
-		info_noip$service="cclink_ie_control";
+		info_noip$protocol="cclink_ie_control";
 		info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 	}
 	else if ( protocolVerType == "\x01" )
 	{	
-		info_noip$service="cclink_ie_field";
+		info_noip$protocol="cclink_ie_field";
 		info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 	} else {
-		info_noip$service="unknownProtocolVerType" + protocolVerType;
+		info_noip$protocol="unknownProtocolVerType" + protocolVerType;
 	}
 			
 	aggregationData_noip = create_aggregationData_noip(info_noip);
@@ -1025,17 +1025,17 @@ event raw::ipTransient(p: raw_pkt_hdr, dataType: string, protocolVerType: string
 	info_noip$pdu_type = "ipTransient";
 	if ( protocolVerType == "\x00" )
 	{
-		info_noip$service="cclink_ie_control";
+		info_noip$protocol="cclink_ie_control";
 		info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 	}
 	else if ( protocolVerType == "\x01" )
 	{
-		info_noip$service="cclink_ie_field";
+		info_noip$protocol="cclink_ie_field";
 		info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 		info_noip$connection_info="0x" + string_to_ascii_hex(connectionInfo);
 		info_noip$node_id=nodeId;
 	} else {
-		info_noip$service="unknownProtocolVerType" + protocolVerType;
+		info_noip$protocol="unknownProtocolVerType" + protocolVerType;
 	}
 			
 	aggregationData_noip = create_aggregationData_noip(info_noip);
@@ -1053,7 +1053,7 @@ event raw::connect(p: raw_pkt_hdr, c_priority: string, srcNodeNumber: string)
 	info_noip$src_mac = p$l2$src;
 	info_noip$dst_mac = p$l2$dst;
 	info_noip$pdu_type = "connect";
-	info_noip$service="cclink_ie_control";
+	info_noip$protocol="cclink_ie_control";
 	info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 			
 	aggregationData_noip = create_aggregationData_noip(info_noip);
@@ -1068,7 +1068,7 @@ event raw::connectAck(p: raw_pkt_hdr, c_priority: string, srcNodeNumber: string)
 	info_noip$src_mac = p$l2$src;
 	info_noip$dst_mac = p$l2$dst;
 	info_noip$pdu_type = "connectAck";
-	info_noip$service="cclink_ie_control";
+	info_noip$protocol="cclink_ie_control";
 	info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 			
 	aggregationData_noip = create_aggregationData_noip(info_noip);
@@ -1083,7 +1083,7 @@ event raw::scan(p: raw_pkt_hdr, c_priority: string, srcNodeNumber: string)
 	info_noip$src_mac = p$l2$src;
 	info_noip$dst_mac = p$l2$dst;
 	info_noip$pdu_type = "scan";
-	info_noip$service="cclink_ie_control";
+	info_noip$protocol="cclink_ie_control";
 	info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 			
 	aggregationData_noip = create_aggregationData_noip(info_noip);
@@ -1098,7 +1098,7 @@ event raw::collect(p: raw_pkt_hdr, c_priority: string, srcNodeNumber: string)
 	info_noip$src_mac = p$l2$src;
 	info_noip$dst_mac = p$l2$dst;
 	info_noip$pdu_type = "collect";
-	info_noip$service="cclink_ie_control";
+	info_noip$protocol="cclink_ie_control";
 	info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 			
 	aggregationData_noip = create_aggregationData_noip(info_noip);
@@ -1113,7 +1113,7 @@ event raw::select(p: raw_pkt_hdr, c_priority: string, srcNodeNumber: string)
 	info_noip$src_mac = p$l2$src;
 	info_noip$dst_mac = p$l2$dst;
 	info_noip$pdu_type = "select";
-	info_noip$service="cclink_ie_control";
+	info_noip$protocol="cclink_ie_control";
 	info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 			
 	aggregationData_noip = create_aggregationData_noip(info_noip);
@@ -1128,7 +1128,7 @@ event raw::launch(p: raw_pkt_hdr, c_priority: string, srcNodeNumber: string)
 	info_noip$src_mac = p$l2$src;
 	info_noip$dst_mac = p$l2$dst;
 	info_noip$pdu_type = "launch";
-	info_noip$service="cclink_ie_control";
+	info_noip$protocol="cclink_ie_control";
 	info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 			
 	aggregationData_noip = create_aggregationData_noip(info_noip);
@@ -1143,7 +1143,7 @@ event raw::token(p: raw_pkt_hdr, c_priority: string, srcNodeNumber: string)
 	info_noip$src_mac = p$l2$src;
 	info_noip$dst_mac = p$l2$dst;
 	info_noip$pdu_type = "token";
-	info_noip$service="cclink_ie_control";
+	info_noip$protocol="cclink_ie_control";
 	info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 			
 	aggregationData_noip = create_aggregationData_noip(info_noip);
@@ -1158,7 +1158,7 @@ event raw::dummy(p: raw_pkt_hdr, c_priority: string, srcNodeNumber: string)
 	info_noip$src_mac = p$l2$src;
 	info_noip$dst_mac = p$l2$dst;
 	info_noip$pdu_type = "dummy";
-	info_noip$service="cclink_ie_control";
+	info_noip$protocol="cclink_ie_control";
 	info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 			
 	aggregationData_noip = create_aggregationData_noip(info_noip);
@@ -1173,7 +1173,7 @@ event raw::nTNTest(p: raw_pkt_hdr, c_priority: string, srcNodeNumber: string)
 	info_noip$src_mac = p$l2$src;
 	info_noip$dst_mac = p$l2$dst;
 	info_noip$pdu_type = "nTNTest";
-	info_noip$service="cclink_ie_control";
+	info_noip$protocol="cclink_ie_control";
 	info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 			
 	aggregationData_noip = create_aggregationData_noip(info_noip);
@@ -1191,7 +1191,7 @@ event raw::cyclicDataW(p: raw_pkt_hdr, c_priority: string, srcNodeNumber: string
 	info_noip$src_mac = p$l2$src;
 	info_noip$dst_mac = p$l2$dst;
 	info_noip$pdu_type = "cyclicDataW";
-	info_noip$service="cclink_ie_control";
+	info_noip$protocol="cclink_ie_control";
 	info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 			
 	aggregationData_noip = create_aggregationData_noip(info_noip);
@@ -1206,7 +1206,7 @@ event raw::cyclicDataB(p: raw_pkt_hdr, c_priority: string, srcNodeNumber: string
 	info_noip$src_mac = p$l2$src;
 	info_noip$dst_mac = p$l2$dst;
 	info_noip$pdu_type = "cyclicDataB";
-	info_noip$service="cclink_ie_control";
+	info_noip$protocol="cclink_ie_control";
 	info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 			
 	aggregationData_noip = create_aggregationData_noip(info_noip);
@@ -1221,7 +1221,7 @@ event raw::cyclicDataOut1(p: raw_pkt_hdr, c_priority: string, srcNodeNumber: str
 	info_noip$src_mac = p$l2$src;
 	info_noip$dst_mac = p$l2$dst;
 	info_noip$pdu_type = "cyclicDataOut1";
-	info_noip$service="cclink_ie_control";
+	info_noip$protocol="cclink_ie_control";
 	info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 			
 	aggregationData_noip = create_aggregationData_noip(info_noip);
@@ -1236,7 +1236,7 @@ event raw::cyclicDataOut2(p: raw_pkt_hdr, c_priority: string, srcNodeNumber: str
 	info_noip$src_mac = p$l2$src;
 	info_noip$dst_mac = p$l2$dst;
 	info_noip$pdu_type = "cyclicDataOut2";
-	info_noip$service="cclink_ie_control";
+	info_noip$protocol="cclink_ie_control";
 	info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 			
 	aggregationData_noip = create_aggregationData_noip(info_noip);
@@ -1251,7 +1251,7 @@ event raw::cyclicDataIn1(p: raw_pkt_hdr, c_priority: string, srcNodeNumber: stri
 	info_noip$src_mac = p$l2$src;
 	info_noip$dst_mac = p$l2$dst;
 	info_noip$pdu_type = "cyclicDataIn1";
-	info_noip$service="cclink_ie_control";
+	info_noip$protocol="cclink_ie_control";
 	info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 			
 	aggregationData_noip = create_aggregationData_noip(info_noip);
@@ -1266,7 +1266,7 @@ event raw::cyclicDataIn2(p: raw_pkt_hdr, c_priority: string, srcNodeNumber: stri
 	info_noip$src_mac = p$l2$src;
 	info_noip$dst_mac = p$l2$dst;
 	info_noip$pdu_type = "cyclicDataIn2";
-	info_noip$service="cclink_ie_control";
+	info_noip$protocol="cclink_ie_control";
 	info_noip$src_node_number="0x" + string_to_ascii_hex(srcNodeNumber);
 			
 	aggregationData_noip = create_aggregationData_noip(info_noip);
@@ -1284,8 +1284,8 @@ event raw::cyclicM(p: raw_pkt_hdr)
 	info_tsn$src_mac = p$l2$src;
 	info_tsn$dst_mac = p$l2$dst;
 	info_tsn$protocol = "cclink_ie_tsn";
-	info_tsn$pdu_type = "cyclic";
-	info_tsn$pdu_choice = "cyclicM/cyclicMs";
+	info_tsn$flame_type = "cyclic";
+	info_tsn$pdu_type = "cyclicM/cyclicMs";
 		
 	aggregationData_tsn = create_aggregationData_tsn(info_tsn);
 	insert_res_aggregationData_tsn(aggregationData_tsn, info_tsn);
@@ -1300,8 +1300,8 @@ event raw::cyclicS(p: raw_pkt_hdr)
 	info_tsn$src_mac = p$l2$src;
 	info_tsn$dst_mac = p$l2$dst;
 	info_tsn$protocol = "cclink_ie_tsn";
-	info_tsn$pdu_type = "cyclic";
-	info_tsn$pdu_choice = "cyclicS/cyclicSs";
+	info_tsn$flame_type = "cyclic";
+	info_tsn$pdu_type = "cyclicS/cyclicSs";
 		
 	aggregationData_tsn = create_aggregationData_tsn(info_tsn);
 	insert_res_aggregationData_tsn(aggregationData_tsn, info_tsn);
@@ -1316,8 +1316,8 @@ event raw::acyclicPriority(p: raw_pkt_hdr)
 	info_tsn$src_mac = p$l2$src;
 	info_tsn$dst_mac = p$l2$dst;
 	info_tsn$protocol = "cclink_ie_tsn";
-	info_tsn$pdu_type = "acyclic";
-	info_tsn$pdu_choice = "acyclicPriority";
+	info_tsn$flame_type = "acyclic";
+	info_tsn$pdu_type = "acyclicPriority";
 		
 	aggregationData_tsn = create_aggregationData_tsn(info_tsn);
 	insert_res_aggregationData_tsn(aggregationData_tsn, info_tsn);
@@ -1332,12 +1332,12 @@ event raw::acyclicDetection(p: raw_pkt_hdr, detectionVer: string)
 	info_tsn$src_mac = p$l2$src;
 	info_tsn$dst_mac = p$l2$dst;
 	info_tsn$protocol = "cclink_ie_tsn";
-	info_tsn$pdu_type = "acyclic";
+	info_tsn$flame_type = "acyclic";
 	if ( detectionVer == "\x00" ) {
-		info_tsn$pdu_choice = "acyclicDetection Ver.0";
+		info_tsn$pdu_type = "acyclicDetection Ver.0";
 	}
 	else if ( detectionVer == "\x01" ) {
-		info_tsn$pdu_choice = "acyclicDetection Ver.1";
+		info_tsn$pdu_type = "acyclicDetection Ver.1";
 	}
 		
 	aggregationData_tsn = create_aggregationData_tsn(info_tsn);
@@ -1372,13 +1372,13 @@ event raw::acyclicDetectionAck(p: raw_pkt_hdr,
 	info_tsn$src_mac = p$l2$src;
 	info_tsn$dst_mac = p$l2$dst;
 	info_tsn$protocol = "cclink_ie_tsn";
-	info_tsn$pdu_type = "acyclic";
+	info_tsn$flame_type = "acyclic";
 
 	if ( detectionAckVer == "\x00" ) {
-		info_tsn$pdu_choice = "acyclicDetectionAck Ver.0";
+		info_tsn$pdu_type = "acyclicDetectionAck Ver.0";
 	}
 	else if ( detectionAckVer == "\x01" ) {
-		info_tsn$pdu_choice = "acyclicDetectionAck Ver.1";
+		info_tsn$pdu_type = "acyclicDetectionAck Ver.1";
 	}
 
 	if (nodeType in res_nodetype_tsn){
@@ -1450,8 +1450,8 @@ event raw::acyclicData(p: raw_pkt_hdr)
 	info_tsn$src_mac = p$l2$src;
 	info_tsn$dst_mac = p$l2$dst;
 	info_tsn$protocol = "cclink_ie_tsn";
-	info_tsn$pdu_type = "acyclic";
-	info_tsn$pdu_choice = "acyclicData";
+	info_tsn$flame_type = "acyclic";
+	info_tsn$pdu_type = "acyclicData";
 		
 	aggregationData_tsn = create_aggregationData_tsn(info_tsn);
 	insert_res_aggregationData_tsn(aggregationData_tsn, info_tsn);
@@ -1467,7 +1467,7 @@ event zeek_done()
 			info_noip$ts = res_aggregationData_noip[i]$ts_s;
 			info_noip$src_mac = i$src_mac;
 			info_noip$dst_mac = i$dst_mac;
-			info_noip$service = i$service;
+			info_noip$protocol = i$protocol;
 			info_noip$pdu_type = i$pdu_type;
 			if ( i?$cmd ){
 				info_noip$cmd = i$cmd;
@@ -1502,8 +1502,8 @@ event zeek_done()
 			info_tsn$src_mac = j$src_mac;
 			info_tsn$dst_mac = j$dst_mac;
 			info_tsn$protocol = j$protocol;
+			info_tsn$flame_type = j$flame_type;
 			info_tsn$pdu_type = j$pdu_type;
-			info_tsn$pdu_choice = j$pdu_choice;
 			if ( j?$node_type ){
 				info_tsn$node_type = j$node_type;
 			}
