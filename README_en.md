@@ -78,7 +78,7 @@ It outputs as `cclink-ie.log`.
 | ts | time | timestamp of the first communication |
 | src_mac | string | source MAC address |
 | dst_mac | string | destination MAC address |
-| protocol | string | protocol name |
+| service | string | protocol name |
 | pdu_type | string | protocol function name |
 | cmd | string | specific fields for transient1 and transient2 |
 | node_type | string | node type |
@@ -96,7 +96,7 @@ An example of `cclink-ie.log` is as follows:
 #unset_field	-
 #path	cclink-ie
 #open	2023-03-15-16-56-36
-#fields	ts	src_mac	dst_mac	protocol	pdu_type	cmd	node_type	node_id	connection_info	src_node_number	number	ts_end
+#fields	ts	src_mac	dst_mac	service	pdu_type	cmd	node_type	node_id	connection_info	src_node_number	number	ts_end
 #types	time	string	string	string	string	string	string	int	string	string	int	time
 1658222113.678757	00:11:11:11:11:11	00:00:00:00:00:01	cclink_ie_field	offset	-	-	0	-	0x0000	25	1658222113.737340
 1658222113.676554	00:11:11:11:11:11	00:00:00:00:00:01	cclink_ie_field	timer	-	-	-	-	0x0000	23	1658222113.738575
@@ -119,7 +119,7 @@ It also outputs as `cclink-ie-tsn.log`.
 | ts | time | timestamp of the first communication |
 | src_mac | string | source MAC address |
 | dst_mac | string | destination MAC address |
-| protocol | string | protocol name |
+| service | string | protocol name |
 | flame_type | string | data frame name |
 | pdu_type | string | protocol function name |
 | node_type | string | node type |
@@ -136,7 +136,7 @@ An example of `cclink-ie-tsn.log` is as follows:
 #unset_field	-
 #path	cclink-ie-tsn
 #open	2023-11-08-08-36-11
-#fields	ts	src_mac	dst_mac	protocol	flame_type	pdu_type	node_type	device_type	function_name	number	ts_end
+#fields	ts	src_mac	dst_mac	service	flame_type	pdu_type	node_type	device_type	function_name	number	ts_end
 #types	time	string	string	string	string	string	string	string	string	int	time
 1697605189.166718	00:0c:29:a8:c1:f0	80:22:a7:83:f9:7e	cclink_ie_tsn&field	acyclic	acyclicTestDataAck	master station	-	-	30	1697605189.169635
 1697605738.834423	00:0c:29:a8:c1:f0	b4:b5:2f:76:cb:e4	cclink_ie_tsn	acyclic	acyclicTestData	master station	-	-	30	1697605738.837371
