@@ -86,7 +86,7 @@ spicyc v1.5.0 (d0bc6053)
 | ts | time | 最初に通信した時のタイムスタンプ |
 | src_mac | string | 送信元MACアドレス |
 | dst_mac | string | 宛先MACアドレス |
-| protocol | string | プロトコル名 |
+| service | string | プロトコル名 |
 | pdu_type | string | プロトコルの関数名 |
 | cmd | string | transient1とtransient2の特有のフィールド |
 | node_type | string | ノード種別 |
@@ -105,7 +105,7 @@ spicyc v1.5.0 (d0bc6053)
 #unset_field	-
 #path	cclink-ie
 #open	2023-03-15-16-56-36
-#fields	ts	src_mac	dst_mac	protocol	pdu_type	cmd	node_type	node_id	connection_info	src_node_number	number	ts_end
+#fields	ts	src_mac	dst_mac	service	pdu_type	cmd	node_type	node_id	connection_info	src_node_number	number	ts_end
 #types	time	string	string	string	string	string	string	int	string	string	int	time
 1658222113.678757	00:11:11:11:11:11	00:00:00:00:00:01	cclink_ie_field	offset	-	-	0	-	0x0000	25	1658222113.737340
 1658222113.676554	00:11:11:11:11:11	00:00:00:00:00:01	cclink_ie_field	timer	-	-	-	-	0x0000	23	1658222113.738575
@@ -128,7 +128,7 @@ spicyc v1.5.0 (d0bc6053)
 | ts | time | 最初に通信した時のタイムスタンプ |
 | src_mac | string | 送信元MACアドレス |
 | dst_mac | string | 宛先MACアドレス |
-| protocol | string | プロトコル名 |
+| service | string | プロトコル名 |
 | flame_type | string | データフレームの名前 |
 | pdu_type | string | プロトコルの関数名 |
 | node_type | string | ノード種別 |
@@ -146,7 +146,7 @@ spicyc v1.5.0 (d0bc6053)
 #unset_field	-
 #path	cclink-ie-tsn
 #open	2023-11-08-08-36-11
-#fields	ts	src_mac	dst_mac	protocol	flame_type	pdu_type	node_type	device_type	function_name	number	ts_end
+#fields	ts	src_mac	dst_mac	service	flame_type	pdu_type	node_type	device_type	function_name	number	ts_end
 #types	time	string	string	string	string	string	string	string	string	int	time
 1697605189.166718	00:0c:29:a8:c1:f0	80:22:a7:83:f9:7e	cclink_ie_tsn&field	acyclic	acyclicTestDataAck	master station	-	-	30	1697605189.169635
 1697605738.834423	00:0c:29:a8:c1:f0	b4:b5:2f:76:cb:e4	cclink_ie_tsn	acyclic	acyclicTestData	master station	-	-	30	1697605738.837371
