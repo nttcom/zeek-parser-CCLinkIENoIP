@@ -69,9 +69,7 @@ If a pcap file contains tsn frame packets, `cclink-ie-tsn.log` is also generated
 
 ## Log type and description
 
-### For CC-Link IE Field and CC-Link IE Control
-
-It outputs as `cclink-ie.log`.
+### CC-Link IE Field and CC-Link IE Control information is output to `cclink-ie.log`.
 
 | Field | Type | Description |
 | --- | --- | --- |
@@ -110,9 +108,7 @@ An example of `cclink-ie.log` is as follows:
 #close	2023-03-15-16-56-36
 ```
 
-### When TSN frame is contained
-
-It also outputs as `cclink-ie-tsn.log`.
+### CC-Link IE TSN information is output to `cclink-ie-tsn.log`.
 
 | Field | Type | Description |
 | --- | --- | --- |
