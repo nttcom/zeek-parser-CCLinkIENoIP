@@ -79,7 +79,7 @@ spicyc v1.5.0 (d0bc6053)
 
 ### CC-Link IE FieldおよびCC-Link IE Control
 
-本プラグインはCC-Link IE FieldおよびCC-Link IE Controlを監視して`cclink-ie.log`として出力します。
+CC-Link IE FieldおよびCC-Link IE Controlを監視して`cclink-ie.log`として出力します。
 
 | フィールド | タイプ | 説明 |
 | --- | --- | --- |
