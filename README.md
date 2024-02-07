@@ -77,7 +77,9 @@ spicyc v1.5.0 (d0bc6053)
 
 ## ログのタイプと説明
 
-### CC-Link IE FieldおよびCC-Link IE Controlの情報は`cclink-ie.log`に出力します
+### CC-Link IE FieldおよびCC-Link IE Control
+
+本プラグインはCC-Link IE FieldおよびCC-Link IE Controlを監視して`cclink-ie.log`として出力します。
 
 | フィールド | タイプ | 説明 |
 | --- | --- | --- |
@@ -117,7 +119,9 @@ spicyc v1.5.0 (d0bc6053)
 #close	2023-03-15-16-56-36
 ```
 
-### CC-Link IE TSNの情報は`cclink-ie-tsn.log`に出力します
+### CC-Link IE TSN
+
+CC-Link IE TSNを監視して`cclink-ie-tsn.log`に出力します。
 
 | フィールド | タイプ | 説明 |
 | --- | --- | --- |
