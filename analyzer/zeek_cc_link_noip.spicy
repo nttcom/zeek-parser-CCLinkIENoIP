@@ -6,15 +6,4 @@ module Zeek_cc_link_noip;
 import NO_IP;
 import zeek;
 
-# TODO: Protocol analyzers should confirm once they are reasonably sure that
-# they are indeed parsing the right protocol. Pick a unit that's a little bit
-# into the parsing process here.
-#
-# on cc_link_noip::SUITABLE_UNIT::%done {
-#     zeek::confirm_protocol();
-# }
-
-# Any error bubbling up to the top unit will trigger a protocol rejection.
-on cc_link_noip::Packet::%error {
-    zeek::reject_protocol("error while parsing cc_link_noip");
-}
+# TODO: Add anything you need here.
