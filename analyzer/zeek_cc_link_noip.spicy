@@ -3,7 +3,7 @@
 
 module Zeek_cc_link_noip;
 
-import cc_link_noip;
+import NO_IP;
 import zeek;
 
 # TODO: Protocol analyzers should confirm once they are reasonably sure that
