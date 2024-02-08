@@ -6,6 +6,17 @@ Zeek-Parser-CCLinkIENoIP is a Zeek plug-in that can analyze CC-Link IE Field, CC
 
 ## Installation
 
+### Installation with Package Manager
+
+This plug-in is provided as a package for [Zeek Package Manger](https://docs.zeek.org/projects/package-manager/en/stable/index.html).
+
+It can be installed by executing the commands below.
+
+```
+zkg refresh
+zkg install zeek-parser-CCLinkIENoIP
+```
+
 ### Manual Installation
 
 Before using this plug-in, please make sure Zeek, Spicy has been installed.
