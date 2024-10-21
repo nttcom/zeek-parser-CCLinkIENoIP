@@ -24,13 +24,13 @@ Before using this plug-in, please make sure Zeek, Spicy has been installed.
 ````
 # Check Zeek
 ~$ zeek -version
-zeek version 5.0.0
+zeek version 7.0.0
 
 # Check Spicy
 ~$ spicyz -version
-1.3.16
+7.0.0
 ~$ spicyc -version
-spicyc v1.5.0 (d0bc6053)
+spicyc v1.11.0 (7ddf6ce4)
 
 # The path of zeek in this manual is based on the following output
 ~$ which zeek
