@@ -25,13 +25,13 @@ zkg install zeek-parser-CCLinkIENoIP
 ```
 # Zeekのチェック
 ~$ zeek -version
-zeek version 5.0.0
+zeek version 7.0.0
 
 # Spicyのチェック
 ~$ spicyz -version
-1.3.16
+7.0.0
 ~$ spicyc -version
-spicyc v1.5.0 (d0bc6053)
+spicyc v1.11.0 (7ddf6ce4)
 
 # 本マニュアルではZeekのパスが以下であることを前提としています。
 ~$ which zeek

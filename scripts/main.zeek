@@ -238,7 +238,7 @@ event zeek_init() &priority=5
 
 event zeek_init()
 	{
-	if ( ! PacketAnalyzer::try_register_packet_analyzer_by_name("Ethernet", 0x890f, "spicy::NO_IP") )
+	if ( ! PacketAnalyzer::try_register_packet_analyzer_by_name("Ethernet", 0x890f, "spicy_NO_IP") )
 		print "cannot register raw layer analyzer";
 	}
 
